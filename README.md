@@ -1,16 +1,18 @@
-
 # ShapeCorners
 <img src="https://i.imgur.com/H9nuCv8.png" alt="img" align="right" width="400px">
 KDE effect rounds/chisels corners of your windows.
 
-Fork of https://sourceforge.net/projects/shapecorners/
+Fork of [this](https://github.com/khanhas/ShapeCorners), which is a fork of [this](https://sourceforge.net/projects/shapecorners/).
 
 ### Features:
 - Customizable via config file
 - Different types of corner: `Rounded` and `Chiseled`
 - Each corner can have different radius
-- Ability to square corner when windows edge is at screen edge.
+- Ability to square corner when windows edge is at screen edge
 - Ability to define `Whitelist` and `Blacklist` to exclude/force applying ShapeCorners
+
+## Why this fork?
+New in this fork are `SquareEdgesX` and `SquareEdgesY`, which allow you to define extra coordinates at which `SquareAtScreenEdge` will take effect. This is particularly useful for multi-monitor setups.
 
 ## Dependencies
 - Distro Debian based (Ubuntu, Kubuntu):
@@ -41,6 +43,8 @@ SquareAtScreenEdge=false
 FilterShadow=false
 Whitelist=
 Blacklist=
+SquareEdgesX=
+SquareEdgesY=
 ```
 
 - `Radius`: Define all corners' or specific corner's radius. Accept 1 to 4 numbers, separate by `,`. E.g.:
@@ -57,6 +61,10 @@ Blacklist=
 - `Blacklist`: List of window class names that will be excluded from applying ShapeCorners. Separate them by `,`. E.g.:
     - `Blacklist=krunner`
     - `Blacklist=krunner,display`
+- `SquareEdgesX`: Extra X coordinates in which SquareAtScreenEdge should take effect. Useful when monitors are placed horizontally from each other, or with monitors of different resolutions. E.g.:
+    - `SquareEdgesX=1080,1081,3000,3001`
+- `SquareEdgesY`: Extra Y coordinates in which SquareAtScreenEdge should take effect. Useful when monitors are placed vertically from each other, or with monitors of different resolutions. E.g.:
+    - `SquareEdgesY=1920`
 
 After changing config, run:
 ```bash
