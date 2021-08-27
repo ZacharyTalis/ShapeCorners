@@ -12,7 +12,7 @@ Fork of [this](https://github.com/khanhas/ShapeCorners), which is a fork of [thi
 - Ability to define `Whitelist` and `Blacklist` to exclude/force applying ShapeCorners
 
 ## Why this fork?
-New in this fork are `SquareEdgesX` and `SquareEdgesY`, which allow you to define extra coordinates at which `SquareAtScreenEdge` will take effect. This is particularly useful for multi-monitor setups.
+New with this fork are `SquareEdgesX` and `SquareEdgesY`, which allow you to define extra coordinates at which `SquareAtScreenEdge` will take effect. This is particularly useful for multi-monitor setups.
 
 ## Dependencies
 - Distro Debian based (Ubuntu, Kubuntu):
