@@ -20,11 +20,14 @@
 #pragma once
 #include <kwineffects.h>
 
-namespace KWin { class GLTexture; }
+namespace KWin
+{
+    class GLTexture;
+}
 
 class Q_DECL_EXPORT ShapeCornersEffect : public KWin::Effect
 {
-//    Q_OBJECT
+    //    Q_OBJECT
 public:
     ShapeCornersEffect();
     ~ShapeCornersEffect();
@@ -37,11 +40,18 @@ public:
     void readConfig();
     void reconfigure(ReconfigureFlags flags);
     bool isValid(KWin::EffectWindow *w);
-    void paintWindow (KWin::EffectWindow* w, int mask, QRegion region, KWin::WindowPaintData& data);
+    void paintWindow(KWin::EffectWindow *w, int mask, QRegion region, KWin::WindowPaintData &data);
     int requestedEffectChainPosition() const { return 100; }
 
 private:
-    enum { TopLeft = 0, TopRight, BottomRight, BottomLeft, NTex };
+    enum
+    {
+        TopLeft = 0,
+        TopRight,
+        BottomRight,
+        BottomLeft,
+        NTex
+    };
     KWin::GLTexture *m_tex[NTex];
 
     QList<int> m_size, m_rSize;
@@ -56,11 +66,14 @@ private:
         Chiseled
     };
     CornerType m_type = CornerType::Normal;
-    
+
     bool squareAtEdge = false;
 
     QStringList whitelist;
     QStringList blacklist;
 
     bool filterShadow = false;
+
+    QList<int> squareEdgesX;
+    QList<int> squareEdgesY;
 };

@@ -86,7 +86,7 @@ ShapeCornersEffect::~ShapeCornersEffect()
 void ShapeCornersEffect::readConfig()
 {
 	KConfig config("shapecornersrc", KConfig::SimpleConfig);
-	
+
 	KConfigGroup generalGroup(&config, "General");
 
 	QList<int> cornerSizes = generalGroup.readEntry("Radius", QList<int>{10, 10, 10, 10});
@@ -98,6 +98,9 @@ void ShapeCornersEffect::readConfig()
 
 	whitelist = generalGroup.readEntry("Whitelist", QStringList());
 	blacklist = generalGroup.readEntry("Blacklist", QStringList());
+
+	squareEdgesX = generalGroup.readEntry("SquareEdgesX", QList<int>{});
+	squareEdgesY = generalGroup.readEntry("SquareEdgesY", QList<int>{});
 
 	if (type.contains(QString("rounded"), Qt::CaseInsensitive))
 	{
@@ -235,7 +238,6 @@ void ShapeCornersEffect::paintWindow(KWin::EffectWindow *w, int mask, QRegion re
 	if (filterShadow)
 		data.quads = qds.filterOut(KWin::WindowQuadShadow);
 
-
 	if (!isValid(w) || m_type == CornerType::Normal)
 	{
 		KWin::effects->paintWindow(w, mask, region, data);
@@ -259,9 +261,9 @@ void ShapeCornersEffect::paintWindow(KWin::EffectWindow *w, int mask, QRegion re
 		tex[i].bind();
 		glCopyTexSubImage2D(
 			GL_TEXTURE_2D, 0, 0, 0,
-			rect[i].x(), 
+			rect[i].x(),
 			s.height() - rect[i].y() - rect[i].height(),
-			rect[i].width(), 
+			rect[i].width(),
 			rect[i].height());
 		tex[i].unbind();
 	}
@@ -276,11 +278,12 @@ void ShapeCornersEffect::paintWindow(KWin::EffectWindow *w, int mask, QRegion re
 	KWin::ShaderManager *sm = KWin::ShaderManager::instance();
 	sm->pushShader(m_shader /*KWin::ShaderTrait::MapTexture*/);
 
+	// Check to see if corners should be squared
 	bool cornerConditions[] = {
-		squareAtEdge && (geo.left() == 0 || geo.top() == 0),
-		squareAtEdge && ((geo.right() + 1) == s.width() || geo.top() == 0),
-		squareAtEdge && ((geo.right() + 1) == s.width() || (geo.bottom() + 1) == s.height()),
-		squareAtEdge && (geo.left() == 0 || (geo.bottom() + 1) == s.height())};
+		squareAtEdge && (geo.left() == 0 || geo.top() == 0 || squareEdgesX.contains(geo.left()) || squareEdgesY.contains(geo.top())),
+		squareAtEdge && ((geo.right() + 1) == s.width() || geo.top() == 0 || squareEdgesX.contains(geo.right() + 1) || squareEdgesY.contains(geo.top())),
+		squareAtEdge && ((geo.right() + 1) == s.width() || (geo.bottom() + 1) == s.height() || squareEdgesX.contains(geo.right() + 1) || squareEdgesY.contains(geo.bottom() + 1)),
+		squareAtEdge && (geo.left() == 0 || (geo.bottom() + 1) == s.height() || squareEdgesX.contains(geo.left()) || squareEdgesY.contains(geo.bottom() + 1))};
 
 	for (int i = 0; i < NTex; ++i)
 	{
