@@ -1,5 +1,5 @@
 # ShapeCorners
-<img src="https://i.imgur.com/H9nuCv8.png" alt="img" align="right" width="400px">
+<img src="https://i.imgur.com/H9nuCv8.png" alt="Three desktop windows demonstrating the Rounded corner effect." align="right" width="400px">
 KDE effect rounds/chisels corners of your windows.
 
 Fork of [this](https://github.com/khanhas/ShapeCorners), which is a fork of [this](https://sourceforge.net/projects/shapecorners/).
@@ -75,3 +75,7 @@ After changing config, run:
 ```bash
 kwin_x11 --replace &
 ```
+
+Happy Squircling!
+
+<img src="https://i.imgur.com/4e0VFku.png" alt="A file browser and a terminal in KDE featuring squircle-ish rounded corners. The terminals shows off colorful ASCII art of a cow saying, 'ShapeCorners gets Squircled!'">
