@@ -12,7 +12,9 @@ Fork of [this](https://github.com/khanhas/ShapeCorners), which is a fork of [thi
 - Ability to define `Whitelist` and `Blacklist` to exclude/force applying ShapeCorners
 
 ## Why this fork?
-This fork introduces `SquareEdgesX` and `SquareEdgesY`, which allow you to define extra coordinates at which `SquareAtScreenEdge` will take effect. This is particularly useful for multi-monitor setups.
+We've got:
+- The experimental corner type `Squircled` type and its `SquircleRatio`
+- `SquareEdgesX` and `SquareEdgesY`, which allow you to define extra coordinates at which `SquareAtScreenEdge` will take effect. Particularly useful for multi-monitor setups
 
 ## Dependencies
 - Distro Debian based (Ubuntu, Kubuntu):
@@ -45,6 +47,7 @@ Whitelist=
 Blacklist=
 SquareEdgesX=
 SquareEdgesY=
+SquircleRatio=1.0
 ```
 
 - `Radius`: Define all corners' or specific corner's radius. Accept 1 to 4 numbers, separate by `,`. E.g.:
@@ -52,7 +55,7 @@ SquareEdgesY=
     - `Radius=10,20`: Top Left and Bottom Right has 10; Top Right and Bottom Left has 20
     - `Radius=30,40,50`: Top Left has 30; Top Right and Bottom Left has 40; Bottom Right has 50
     - `Radius=20,50,30,10`: Top Left has 20; Top Right has 50; Bottom Right has 30; Bottom Left has 10
-- `Type`: `Rounded` or `Chiseled`
+- `Type`: `Rounded`, `Chiseled`, or `Squircled`
 - `SquareAtScreenEdge`: Square off corner at when window edge is at screen edge. Boolean `true` or `false`.
 - `FilterShadow`: Since there is no way to change corners of shadow layer, you might want to remove shadow layer out. Boolean `true` or `false`.
 - `Whitelist`: List of window class names that will be forced to apply ShapeCorners. Separate them by `,`. E.g.:
@@ -65,6 +68,8 @@ SquareEdgesY=
     - `SquareEdgesX=1080,1081,3000,3001`
 - `SquareEdgesY`: Extra Y coordinates in which SquareAtScreenEdge should take effect. Useful when monitors are placed vertically from each other, or with monitors of different resolutions. E.g.:
     - `SquareEdgesY=1920`
+- `SquircleRatio`: Behind the scenes, squircle corners are approximated using cubic beziers. Use this value to adjust the strength of all bezier control points. Just don't stray too far from the default `1.0`! E.g.:
+  - `SquircleRatio=1.043`
 
 After changing config, run:
 ```bash

@@ -8,11 +8,14 @@
             {
                 "Github": "https://github.com/khanhas",
                 "Name": "khanhas"
+            },
+            {
+                "Github": "https://github.com/ZacharyTalis",
+                "Name": "Zachary Talis"
             }
         ],
         "Category": "Appearance",
-        "Dependencies": [
-        ],
+        "Dependencies": [],
         "Description": "Effect rounds/chisels corners of your windows.",
         "EnabledByDefault": true,
         "Icon": "",

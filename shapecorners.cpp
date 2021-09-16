@@ -29,6 +29,8 @@
 #include <KConfigGroup>
 #include "shapecorners.h"
 
+#include <QPainterPath>
+
 KWIN_EFFECT_FACTORY_SUPPORTED_ENABLED(ShapeCornersFactory,
 									  ShapeCornersEffect,
 									  "shapecorners.json",
@@ -102,6 +104,8 @@ void ShapeCornersEffect::readConfig()
 	squareEdgesX = generalGroup.readEntry("SquareEdgesX", QList<int>{});
 	squareEdgesY = generalGroup.readEntry("SquareEdgesY", QList<int>{});
 
+	squircleRatio = generalGroup.readEntry("SquircleRatio", float{1.0});
+
 	if (type.contains(QString("rounded"), Qt::CaseInsensitive))
 	{
 		m_type = CornerType::Rounded;
@@ -109,6 +113,10 @@ void ShapeCornersEffect::readConfig()
 	else if (type.contains(QString("chiseled"), Qt::CaseInsensitive))
 	{
 		m_type = CornerType::Chiseled;
+	}
+	else if (type.contains(QString("squircled"), Qt::CaseInsensitive))
+	{
+		m_type = CornerType::Squircled;
 	}
 
 	bool isAllZero = true;
@@ -165,7 +173,8 @@ void ShapeCornersEffect::genMasks()
 		p.setCompositionMode(QPainter::CompositionMode_DestinationOut);
 		p.setPen(Qt::NoPen);
 		p.setBrush(Qt::black);
-		p.setRenderHint(QPainter::HighQualityAntialiasing);
+		// Replaced obsolete HighQualityAntialiasing renderhint
+		p.setRenderHint(QPainter::Antialiasing);
 
 		if (m_type == CornerType::Rounded)
 		{
@@ -180,6 +189,20 @@ void ShapeCornersEffect::genMasks()
 				QPoint(0, size)};
 
 			p.drawPolygon(points, 4);
+		}
+		else if (m_type == CornerType::Squircled)
+		{
+			QPainterPath squircle;
+			float squircleSize = size * 2 * squircleRatio;
+			float squircleEdge = (size * 2) - squircleSize;
+
+			squircle.moveTo(size, 0);
+			squircle.cubicTo(QPointF(squircleSize, 0), QPointF(size * 2, squircleEdge), QPointF(size * 2, size));
+			squircle.cubicTo(QPointF(size * 2, squircleSize), QPointF(squircleSize, size * 2), QPointF(size, size * 2));
+			squircle.cubicTo(QPointF(squircleEdge, size * 2), QPointF(0, squircleSize), QPointF(0, size));
+			squircle.cubicTo(QPointF(0, squircleEdge), QPointF(squircleEdge, 0), QPointF(size, 0));
+
+			p.drawPolygon(squircle.toFillPolygon());
 		}
 		p.end();
 

@@ -63,7 +63,8 @@ private:
     {
         Normal = 0,
         Rounded,
-        Chiseled
+        Chiseled,
+        Squircled
     };
     CornerType m_type = CornerType::Normal;
 
@@ -76,4 +77,6 @@ private:
 
     QList<int> squareEdgesX;
     QList<int> squareEdgesY;
+
+    float squircleRatio;
 };
