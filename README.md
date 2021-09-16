@@ -68,7 +68,7 @@ SquircleRatio=1.0
     - `SquareEdgesX=1080,1081,3000,3001`
 - `SquareEdgesY`: Extra Y coordinates in which SquareAtScreenEdge should take effect. Useful when monitors are placed vertically from each other, or with monitors of different resolutions. E.g.:
     - `SquareEdgesY=1920`
-- `SquircleRatio`: Behind the scenes, squircle corners are approximated using cubic beziers. Use this value to adjust the strength of all bezier control points. Just don't stray too far from the default `1.0`! E.g.:
+- `SquircleRatio`: Behind the scenes, squircle corners are approximated using cubic Bézier curves. Use this value to adjust the strength of all Bézier control points. Just don't stray too far from the default `1.0`! E.g.:
   - `SquircleRatio=1.043`
 
 After changing config, run:
