@@ -28,7 +28,7 @@ sudo pacman -S git cmake gcc gettext extra-cmake-modules qt5-tools qt5-x11extras
 
 ## Build
 ```
-git clone https://github.com/khanhas/ShapeCorners
+git clone https://github.com/ZacharyTalis/ShapeCorners
 cd ShapeCorners
 mkdir build; cd build
 cmake ../ -DCMAKE_INSTALL_PREFIX=/usr -DQT5BUILD=ON
