@@ -27,7 +27,7 @@ namespace KWin
 
 class Q_DECL_EXPORT ShapeCornersEffect : public KWin::Effect
 {
-    //    Q_OBJECT
+    Q_OBJECT
 public:
     ShapeCornersEffect();
     ~ShapeCornersEffect();
@@ -41,7 +41,8 @@ public:
     void reconfigure(ReconfigureFlags flags);
     bool isValid(KWin::EffectWindow *w);
     void paintWindow(KWin::EffectWindow *w, int mask, QRegion region, KWin::WindowPaintData &data);
-    int requestedEffectChainPosition() const { return 100; }
+    void windowMaximizedStateChanged(KWin::EffectWindow *w, bool horizontal, bool vertical);
+    int requestedEffectChainPosition() const { return 99; }
 
 private:
     enum
@@ -59,6 +60,7 @@ private:
 
     QRegion m_updateRegion;
     KWin::GLShader *m_shader;
+    QList<KWin::EffectWindow *> m_managed;
     enum CornerType
     {
         Normal = 0,

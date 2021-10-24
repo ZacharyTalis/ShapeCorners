@@ -18,18 +18,19 @@
  */
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QImage>
 #include <QFile>
 #include <QTextStream>
 #include <QStandardPaths>
 #include <kwinglplatform.h>
 #include <kwinglutils.h>
+#include <kwindowsystem.h>
 #include <QMatrix4x4>
 #include <KConfig>
 #include <KConfigGroup>
-#include "shapecorners.h"
 
-#include <QPainterPath>
+#include "shapecorners.h"
 
 KWIN_EFFECT_FACTORY_SUPPORTED_ENABLED(ShapeCornersFactory,
 									  ShapeCornersEffect,
@@ -69,6 +70,8 @@ ShapeCornersEffect::ShapeCornersEffect() : KWin::Effect(), m_shader(0)
 			m_shader->setUniform(sampler, 0);
 			KWin::ShaderManager::instance()->popShader();
 		}
+		else
+			qDebug() << "ShapeCorners: no valid shaders found! ShapeCorners will not work.";
 	}
 	else
 		deleteLater();
@@ -256,10 +259,10 @@ bool ShapeCornersEffect::isValid(KWin::EffectWindow *w)
 
 void ShapeCornersEffect::paintWindow(KWin::EffectWindow *w, int mask, QRegion region, KWin::WindowPaintData &data)
 {
-	KWin::WindowQuadList qds(data.quads);
+	// KWin::WindowQuadList qds(data.quads);
 
-	if (filterShadow)
-		data.quads = qds.filterOut(KWin::WindowQuadShadow);
+	// if (filterShadow)
+	// 	data.quads = qds.filterOut(KWin::WindowQuadShadow);
 
 	if (!isValid(w) || m_type == CornerType::Normal)
 	{
@@ -268,7 +271,7 @@ void ShapeCornersEffect::paintWindow(KWin::EffectWindow *w, int mask, QRegion re
 	}
 
 	// Map the corners
-	const QRect geo(w->geometry());
+	const QRect geo(w->frameGeometry());
 	const QRect rect[NTex] = {
 		QRect(geo.topLeft(), m_corner.at(0)),
 		QRect(geo.topRight() - QPoint(m_size.at(1) - 1, 0), m_corner.at(1)),
@@ -276,19 +279,15 @@ void ShapeCornersEffect::paintWindow(KWin::EffectWindow *w, int mask, QRegion re
 		QRect(geo.bottomLeft() - QPoint(0, m_size.at(3) - 1), m_corner.at(3))};
 
 	// Copy the corner regions
-	KWin::GLTexture tex[NTex];
+	QList<KWin::GLTexture> tex;
 	const QRect s(KWin::effects->virtualScreenGeometry());
 	for (int i = 0; i < NTex; ++i)
 	{
-		tex[i] = KWin::GLTexture(GL_RGBA8, rect[i].size());
-		tex[i].bind();
-		glCopyTexSubImage2D(
-			GL_TEXTURE_2D, 0, 0, 0,
-			rect[i].x(),
-			s.height() - rect[i].y() - rect[i].height(),
-			rect[i].width(),
-			rect[i].height());
-		tex[i].unbind();
+		KWin::GLTexture t = KWin::GLTexture(GL_RGBA8, rect[i].size());
+		t.bind();
+		glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, rect[i].x(), s.height() - rect[i].y() - rect[i].height(), rect[i].width(), rect[i].height());
+		t.unbind();
+		tex.append(t);
 	}
 
 	// Paint the window content
@@ -299,7 +298,7 @@ void ShapeCornersEffect::paintWindow(KWin::EffectWindow *w, int mask, QRegion re
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	const int mvpMatrixLocation = m_shader->uniformLocation("modelViewProjectionMatrix");
 	KWin::ShaderManager *sm = KWin::ShaderManager::instance();
-	sm->pushShader(m_shader /*KWin::ShaderTrait::MapTexture*/);
+	sm->pushShader(m_shader);
 
 	// Check to see if corners should be squared
 	bool cornerConditions[] = {
@@ -313,10 +312,9 @@ void ShapeCornersEffect::paintWindow(KWin::EffectWindow *w, int mask, QRegion re
 		if (cornerConditions[i])
 			continue;
 
-		QMatrix4x4 modelViewProjection;
-		modelViewProjection.ortho(0, s.width(), s.height(), 0, 0, 65535);
-		modelViewProjection.translate(rect[i].x(), rect[i].y());
-		m_shader->setUniform(mvpMatrixLocation, modelViewProjection);
+		QMatrix4x4 mvp = data.screenProjectionMatrix();
+		mvp.translate(rect[i].x(), rect[i].y());
+		m_shader->setUniform(mvpMatrixLocation, mvp);
 
 		glActiveTexture(GL_TEXTURE1);
 		m_tex[i]->bind();
@@ -330,7 +328,7 @@ void ShapeCornersEffect::paintWindow(KWin::EffectWindow *w, int mask, QRegion re
 	}
 
 	sm->popShader();
-	data.quads = qds;
+	// data.quads = qds;
 	glDisable(GL_BLEND);
 }
 

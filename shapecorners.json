@@ -21,7 +21,7 @@
         "Icon": "",
         "Id": "kwin4_effect_shapecorners",
         "License": "GPL",
-        "Name": "ShapeCorners_Fork",
+        "Name": "ShapeCorners",
         "ServiceTypes": [
             "KWin/Effect"
         ],
