@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/build/kwin4_effect_shapecorners_autogen/include",
+                "/usr/include/qt",
+                "/usr/include/qt/QtGui",
+                "/usr/include/qt/QtCore",
+                "/usr/include/KF5",
+                "/usr/include/KF5/KWindowSystem",
+                "/usr/include/KF5/KConfigCore",
+                "/usr/include/KF5/KCoreAddons"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/sbin/clang",
+            "cStandard": "c17",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-clang-x64"
+        }
+    ],
+    "version": 4
+}
