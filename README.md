@@ -4,7 +4,7 @@ KDE effect rounds/chisels corners of your windows.
 
 Fork of [this](https://github.com/khanhas/ShapeCorners), which is a fork of [this](https://sourceforge.net/projects/shapecorners/). Implements KDE 5.23 fixes from [matinlotfali's fork](https://github.com/matinlotfali/KDE-Rounded-Corners).
 
-Using KDE 5.22 or below? Check out [the `pre-5.23` branch](https://github.com/ZacharyTalis/ShapeCorners/tree/pre-5.23).
+Using an older version of KDE? Check out [the `pre-5.23`](https://github.com/ZacharyTalis/ShapeCorners/tree/pre-5.23) and [`5.23`](https://github.com/ZacharyTalis/ShapeCorners/tree/5.23) branches!
 
 ### Features:
 - Customizable via config file
