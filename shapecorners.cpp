@@ -250,7 +250,7 @@ bool ShapeCornersEffect::isValid(KWin::EffectWindow *w)
 	if (className.contains("plasma", Qt::CaseInsensitive) && !w->isNormalWindow() && !w->isDialog() && !w->isModal())
 		return false;
 
-	if (!w->isPaintingEnabled() || (w->isDesktop()) || w->isPopupMenu())
+	if (w->isDesktop() || w->isPopupMenu())
 		return false;
 
 	return true;
@@ -338,7 +338,11 @@ bool ShapeCornersEffect::enabledByDefault()
 
 bool ShapeCornersEffect::supported()
 {
-	return KWin::effects->isOpenGLCompositing() && KWin::GLRenderTarget::supported();
+#if KWIN_EFFECT_API_VERSION < 234
+    return KWin::effects->isOpenGLCompositing() && KWin::GLRenderTarget::supported();
+#else
+    return KWin::effects->isOpenGLCompositing();
+#endif
 }
 
 #include "shapecorners.moc"
